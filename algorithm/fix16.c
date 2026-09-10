@@ -13,3 +13,16 @@ fix16_t fix16_sub(fix16_t a, fix16_t b) {
     if (diff < FIX16_MIN) return FIX16_MIN;
     return (fix16_t)diff;
 }
+fix16_t fix16_mul(fix16_t a, fix16_t b) {
+    int64_t product = (int64_t)a * (int64_t)b;
+
+    /* round to nearest instead of truncating toward zero */
+    product += 32768;
+
+    /* remove the second scale factor */
+    product >>= 16;
+
+    if (product > FIX16_MAX) return FIX16_MAX;
+    if (product < FIX16_MIN) return FIX16_MIN;
+    return (fix16_t)product;
+}

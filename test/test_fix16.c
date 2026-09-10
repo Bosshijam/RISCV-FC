@@ -25,7 +25,11 @@ int main(void) {
     /* overflow must SATURATE, not wrap */
     check("max + max", fix16_add(FIX16_MAX, FIX16_MAX), FIX16_MAX);
     check("min - max", fix16_sub(FIX16_MIN, FIX16_MAX), FIX16_MIN);
-
+    check("1.5 * 2.0", fix16_mul(F16(1.5), F16(2.0)), F16(3.0));
+    check("0.5 * 0.5", fix16_mul(F16(0.5), F16(0.5)), F16(0.25));
+    check("-2.0 * 3.0", fix16_mul(F16(-2.0), F16(3.0)), F16(-6.0));
+    check("100 * 100", fix16_mul(F16(100.0), F16(100.0)), F16(10000.0));
+    check("-0.5 * 0.5", fix16_mul(F16(-0.5), F16(0.5)), F16(-0.25));
     printf("\n%s\n", failures ? "SOME TESTS FAILED" : "ALL TESTS PASSED");
     return failures;
 }

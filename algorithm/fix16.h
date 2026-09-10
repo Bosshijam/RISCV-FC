@@ -15,5 +15,7 @@ typedef int32_t fix16_t;
 
 fix16_t fix16_add(fix16_t a, fix16_t b);
 fix16_t fix16_sub(fix16_t a, fix16_t b);
+fix16_t fix16_mul(fix16_t a, fix16_t b);
+fix16_t fix16_div(fix16_t a, fix16_t b);
 
 #endif
