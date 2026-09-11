@@ -30,6 +30,11 @@ int main(void) {
     check("-2.0 * 3.0", fix16_mul(F16(-2.0), F16(3.0)), F16(-6.0));
     check("100 * 100", fix16_mul(F16(100.0), F16(100.0)), F16(10000.0));
     check("-0.5 * 0.5", fix16_mul(F16(-0.5), F16(0.5)), F16(-0.25));
+    check("3.0 / 2.0", fix16_div(F16(3.0), F16(2.0)), F16(1.5));
+    check("1.0 / 4.0", fix16_div(F16(1.0), F16(4.0)), F16(0.25));
+    check("-6.0 / 3.0", fix16_div(F16(-6.0), F16(3.0)), F16(-2.0));
+    check("div by zero +", fix16_div(F16(5.0), 0), FIX16_MAX);
+    check("div by zero -", fix16_div(F16(-5.0), 0), FIX16_MIN);
     printf("\n%s\n", failures ? "SOME TESTS FAILED" : "ALL TESTS PASSED");
     return failures;
 }

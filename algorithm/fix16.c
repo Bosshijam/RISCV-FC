@@ -26,3 +26,16 @@ fix16_t fix16_mul(fix16_t a, fix16_t b) {
     if (product < FIX16_MIN) return FIX16_MIN;
     return (fix16_t)product;
 }
+fix16_t fix16_div(fix16_t a, fix16_t b) {
+    /* never divide by zero on a flying aircraft */
+    if (b == 0) {
+        return (a >= 0) ? FIX16_MAX : FIX16_MIN;
+    }
+
+    /* restore the scale factor that division cancels out */
+    int64_t result = ((int64_t)a << 16) / b;
+
+    if (result > FIX16_MAX) return FIX16_MAX;
+    if (result < FIX16_MIN) return FIX16_MIN;
+    return (fix16_t)result;
+}
