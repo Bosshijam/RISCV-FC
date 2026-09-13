@@ -1,4 +1,9 @@
 *.o
+build/
+*.csv
+test/run_*
+tools/gen_*
+!tools/*.c*.o
 run_*
 build/
 *.csv
