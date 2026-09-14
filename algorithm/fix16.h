@@ -19,4 +19,5 @@ fix16_t fix16_mul(fix16_t a, fix16_t b);
 fix16_t fix16_div(fix16_t a, fix16_t b);
 fix16_t fix16_sin(fix16_t degrees);
 fix16_t fix16_cos(fix16_t degrees);
+fix16_t fix16_atan2(fix16_t y, fix16_t x);
 #endif

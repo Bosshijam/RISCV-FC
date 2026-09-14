@@ -82,3 +82,27 @@ fix16_t fix16_sin(fix16_t degrees) {
 fix16_t fix16_cos(fix16_t degrees) {
     return fix16_sin(fix16_add(degrees, F16(90.0)));
 }
+/* arctangent of y/x, returns degrees in -180..+180 */
+fix16_t fix16_atan2(fix16_t y, fix16_t x) {
+    fix16_t abs_y = (y < 0) ? fix16_sub(0, y) : y;
+    fix16_t angle;
+
+    /* both zero: no direction, return 0 rather than garbage */
+    if (x == 0 && y == 0) return 0;
+
+    if (x >= 0) {
+        /* ratio stays within -1..+1 */
+        fix16_t denom = fix16_add(abs_y, x);
+        if (denom == 0) return 0;
+        fix16_t r = fix16_div(fix16_sub(x, abs_y), denom);
+        angle = fix16_sub(F16(45.0), fix16_mul(F16(45.0), r));
+    } else {
+        fix16_t denom = fix16_add(abs_y, fix16_sub(0, x));
+        if (denom == 0) return 0;
+        fix16_t r = fix16_div(fix16_add(x, abs_y), denom);
+        angle = fix16_sub(F16(135.0), fix16_mul(F16(45.0), r));
+    }
+
+    /* mirror into the lower half-plane if y was negative */
+    return (y < 0) ? fix16_sub(0, angle) : angle;
+}

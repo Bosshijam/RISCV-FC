@@ -41,6 +41,12 @@ int main(void) {
     check("sin(270)", fix16_sin(F16(270.0)), F16(-1.0));
     check("cos(0)",   fix16_cos(F16(0.0)),   F16(1.0));
     check("cos(90)",  fix16_cos(F16(90.0)),  F16(0.0));
+    check("atan2(0,1)",   fix16_atan2(F16(0.0),  F16(1.0)),  F16(0.0));
+    check("atan2(1,0)",   fix16_atan2(F16(1.0),  F16(0.0)),  F16(90.0));
+    check("atan2(0,-1)",  fix16_atan2(F16(0.0),  F16(-1.0)), F16(180.0));
+    check("atan2(-1,0)",  fix16_atan2(F16(-1.0), F16(0.0)),  F16(-90.0));
+    check("atan2(1,1)",   fix16_atan2(F16(1.0),  F16(1.0)),  F16(45.0));
+    check("atan2(-1,-1)", fix16_atan2(F16(-1.0), F16(-1.0)), F16(-135.0));
     printf("\n%s\n", failures ? "SOME TESTS FAILED" : "ALL TESTS PASSED");
     return failures;
 }
