@@ -35,6 +35,12 @@ int main(void) {
     check("-6.0 / 3.0", fix16_div(F16(-6.0), F16(3.0)), F16(-2.0));
     check("div by zero +", fix16_div(F16(5.0), 0), FIX16_MAX);
     check("div by zero -", fix16_div(F16(-5.0), 0), FIX16_MIN);
+    check("sin(0)",   fix16_sin(F16(0.0)),   F16(0.0));
+    check("sin(90)",  fix16_sin(F16(90.0)),  F16(1.0));
+    check("sin(180)", fix16_sin(F16(180.0)), F16(0.0));
+    check("sin(270)", fix16_sin(F16(270.0)), F16(-1.0));
+    check("cos(0)",   fix16_cos(F16(0.0)),   F16(1.0));
+    check("cos(90)",  fix16_cos(F16(90.0)),  F16(0.0));
     printf("\n%s\n", failures ? "SOME TESTS FAILED" : "ALL TESTS PASSED");
     return failures;
 }

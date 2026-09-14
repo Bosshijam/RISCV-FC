@@ -1,5 +1,5 @@
 #include "fix16.h"
-
+#include "sin_table.h"
 fix16_t fix16_add(fix16_t a, fix16_t b) {
     int64_t sum = (int64_t)a + (int64_t)b;
     if (sum > FIX16_MAX) return FIX16_MAX;
@@ -38,4 +38,47 @@ fix16_t fix16_div(fix16_t a, fix16_t b) {
     if (result > FIX16_MAX) return FIX16_MAX;
     if (result < FIX16_MIN) return FIX16_MIN;
     return (fix16_t)result;
+}
+/* sine of an angle in degrees, Q16.16 in and out */
+fix16_t fix16_sin(fix16_t degrees) {
+    int negate = 0;
+
+    /* wrap into 0..360 */
+    while (degrees < 0)            degrees = fix16_add(degrees, F16(360.0));
+    while (degrees >= F16(360.0))  degrees = fix16_sub(degrees, F16(360.0));
+
+    /* fold the bottom half onto the top, remembering the sign */
+    if (degrees >= F16(180.0)) {
+        degrees = fix16_sub(degrees, F16(180.0));
+        negate = 1;
+    }
+
+    /* mirror the second quadrant onto the first */
+    if (degrees > F16(90.0)) {
+        degrees = fix16_sub(F16(180.0), degrees);
+    }
+
+    /* which table entry? 256 steps span 90 degrees */
+    int64_t position = (((int64_t)degrees * SIN_TABLE_ENTRIES) << 16) / F16(90.0);
+    int index = (int)(position >> 16);
+        if (index < 0) index = 0;
+    if (index >= SIN_TABLE_ENTRIES) {
+        /* exactly 90 degrees - return the last entry directly */
+        return negate ? fix16_sub(0, sin_table[SIN_TABLE_ENTRIES])
+                      : sin_table[SIN_TABLE_ENTRIES];    }
+
+    /* how far between this entry and the next, as a Q16.16 fraction */
+    fix16_t fraction = (fix16_t)(position & 0xFFFF);
+
+    fix16_t low  = sin_table[index];
+    fix16_t high = sin_table[index + 1];
+    fix16_t gap  = fix16_sub(high, low);
+
+    fix16_t result = fix16_add(low, fix16_mul(gap, fraction));
+    return negate ? fix16_sub(0, result) : result;
+}
+
+/* cos(x) = sin(x + 90) */
+fix16_t fix16_cos(fix16_t degrees) {
+    return fix16_sin(fix16_add(degrees, F16(90.0)));
 }
