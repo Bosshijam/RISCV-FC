@@ -1,0 +1,1 @@
+- Install riscv32-vega-elf toolchain before week 7 (get setup notes from captain)
