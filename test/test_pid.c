@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "../sim/plant.h"
 #include "../algorithm/pid.h"
+#include <stdint.h>
 
 int main(void) {
     plant_t p;
@@ -15,7 +16,13 @@ int main(void) {
     printf("time,angle,rate\n");
 
     for (int i = 0; i < 50000; i++) {
-        fix16_t torque = pid_update(&pid, setpoint, p.angle, dt);
+        fix16_t measured = plant_measure(&p, F16(0.1));   /* 0.1 deg of noise */
+        if (i < 5) {
+           fprintf(stderr, "i=%d true=%.4f measured=%.4f\n", i,
+           (double)p.angle / 65536.0,
+           (double)measured / 65536.0);
+        }
+        fix16_t torque = pid_update(&pid, setpoint, measured, dt);
         plant_step(&p, torque, dt);
 
         printf("%.3f,%.4f,%.4f\n",
@@ -28,3 +35,4 @@ int main(void) {
 
     return 0;
 }
+ 
