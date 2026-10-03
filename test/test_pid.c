@@ -7,11 +7,11 @@ int main(void) {
     plant_t p;
     pid_t   pid;
 
-    plant_init(&p, F16(1.0));
-    pid_init(&pid, F16(1.0), F16(0.1), F16(2), F16(50.0));
-
     fix16_t dt       = F16(0.002);
     fix16_t setpoint = F16(10.0);
+    
+    plant_init(&p, F16(1.0));
+    pid_init(&pid, F16(1.0), F16(0.1), F16(2.0), F16(50.0), F16(20.0), dt);
 
     printf("time,angle,rate\n");
 
