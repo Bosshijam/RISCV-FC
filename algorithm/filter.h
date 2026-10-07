@@ -9,6 +9,7 @@ typedef struct {
 } pt1_t;
 
 void    pt1_init(pt1_t *f, fix16_t cutoff_hz, fix16_t dt);
+void    pt1_set_cutoff(pt1_t *f, fix16_t cutoff_hz, fix16_t dt);
 fix16_t pt1_apply(pt1_t *f, fix16_t input);
 
 #endif

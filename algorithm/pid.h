@@ -3,18 +3,25 @@
 
 #include "fix16.h"
 #include "filter.h"
+
+/* everything you tune lives here */
 typedef struct {
     fix16_t kp;
     fix16_t ki;
     fix16_t kd;
+    fix16_t i_limit;
+    fix16_t dterm_cutoff_hz;
+} pid_params_t;
+
+typedef struct {
+    pid_params_t params;
     fix16_t integral;
-    fix16_t integral_limit;
     fix16_t prev_measurement;
     pt1_t   dterm_filter;
 } pid_t;
 
-void    pid_init(pid_t *pid, fix16_t kp, fix16_t ki, fix16_t kd,
-                 fix16_t i_limit, fix16_t dterm_cutoff_hz, fix16_t dt);
+void    pid_init(pid_t *pid, const pid_params_t *params, fix16_t dt);
+void    pid_set_params(pid_t *pid, const pid_params_t *params, fix16_t dt);
 fix16_t pid_update(pid_t *pid, fix16_t setpoint, fix16_t measurement, fix16_t dt);
 
 #endif
