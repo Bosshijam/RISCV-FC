@@ -106,3 +106,28 @@ fix16_t fix16_atan2(fix16_t y, fix16_t x) {
     /* mirror into the lower half-plane if y was negative */
     return (y < 0) ? fix16_sub(0, angle) : angle;
 }
+/* square root in Q16.16.
+ * sqrt(X/65536) * 65536 = sqrt(X << 16), so shift up and take an integer root.
+ * negative input returns 0 rather than failing. */
+fix16_t fix16_sqrt(fix16_t x) {
+    if (x <= 0) return 0;
+
+    uint64_t num = (uint64_t)x << 16;
+    uint64_t res = 0;
+    uint64_t bit = (uint64_t)1 << 62;
+
+    while (bit > num) bit >>= 2;           /* start at the highest useful bit */
+
+    while (bit != 0) {
+        if (num >= res + bit) {
+            num -= res + bit;
+            res  = (res >> 1) + bit;
+        } else {
+            res >>= 1;
+        }
+        bit >>= 2;
+    }
+
+    if (num > res) res++;                  /* round to nearest */
+    return (fix16_t)res;
+}
