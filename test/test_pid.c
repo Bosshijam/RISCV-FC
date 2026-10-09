@@ -18,7 +18,7 @@ int main(void) {
         .kd = F16(2.0),
         .i_limit = F16(50.0),
         .out_limit = F16(5.0),
-        .dterm_cutoff_hz = F16(20.0),
+        .dterm_cutoff_hz = F16(5.0),
     };
     pid_init(&pid, &params, dt);
 
