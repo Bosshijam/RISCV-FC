@@ -16,3 +16,9 @@ Plant: inertia 1.0, no damping. Setpoint 10 deg. dt = 2 ms, 20 s run.
 | 9  | 1.0 | 0.1 | 2.0 | 50 | 14.4%       | 10.00 |      0.1 deg noise, 20 Hz D filter |
 | 10 | 1.0 | 0.1 | 2.0 | 50 | 14.1%       | 10.00 |      5 Hz D filter, lag cost not visible on this slow plant |
 | 12 | 1.0 | 0.1 | 2.0 | 50 | 14.4%       | 10.00 |      params struct refactor, matches run 9 |
+| 13 | 1.0 | 0.1 | 2.0 | 50 | 39.0% | 10.40 | motor clamp at 5, no windup protection |
+| 14 | 1.0 | 0.1 | 2.0 | 50 | 27.6% | 10.44 | clamp at 5, conditional integration, not yet settled |
+
+
+---------------------------"Gyros_Calibration-----------------------------------------------
+1)calibration at 1000 samples gives 1.4958 for a true 1.5, which is a 0.28° residual after 60 s

@@ -12,9 +12,17 @@ void plant_init(plant_t *p, fix16_t inertia) {
     p->angle   = 0;
     p->rate    = 0;
     p->inertia = inertia;
+    p->max_torque = F16(5.0); /*its the limit of the motor and ut can't move faster than that */   
 }
 
+    
+
 void plant_step(plant_t *p, fix16_t torque, fix16_t dt) {
+
+    if (torque >  p->max_torque) torque =  p->max_torque;
+    if (torque < -p->max_torque) torque = -p->max_torque;
+
+
     /* Newton: acceleration = torque / inertia */
     fix16_t accel = fix16_div(torque, p->inertia);
 

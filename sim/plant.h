@@ -7,6 +7,7 @@ typedef struct {
     fix16_t angle;      /* degrees */
     fix16_t rate;       /* degrees per second */
     fix16_t inertia;    /* resistance to being spun up */
+    fix16_t max_torque;  /* saturtion  limit */
 } plant_t;
 
 void plant_init(plant_t *p, fix16_t inertia);

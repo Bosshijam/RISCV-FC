@@ -4,12 +4,12 @@
 #include "fix16.h"
 #include "filter.h"
 
-/* everything you tune lives here */
 typedef struct {
     fix16_t kp;
     fix16_t ki;
     fix16_t kd;
     fix16_t i_limit;
+    fix16_t out_limit;        /* the largest output the actuator can use */
     fix16_t dterm_cutoff_hz;
 } pid_params_t;
 
