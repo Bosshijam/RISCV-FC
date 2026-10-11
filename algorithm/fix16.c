@@ -82,30 +82,36 @@ fix16_t fix16_sin(fix16_t degrees) {
 fix16_t fix16_cos(fix16_t degrees) {
     return fix16_sin(fix16_add(degrees, F16(90.0)));
 }
+ /* atan(z) for 0 <= z <= 1, result in degrees.
+ * Polynomial from Abramowitz & Stegun 4.4.49, error about 1e-5 rad (0.0006 deg). */
+static fix16_t atan_unit_deg(fix16_t z) {
+    fix16_t z2 = fix16_mul(z, z);
+    fix16_t p  = F16(0.0208351);
+    p = fix16_add(F16(-0.0851330), fix16_mul(z2, p));
+    p = fix16_add(F16( 0.1801410), fix16_mul(z2, p));
+    p = fix16_add(F16(-0.3302995), fix16_mul(z2, p));
+    p = fix16_add(F16( 0.9998660), fix16_mul(z2, p));
+    fix16_t rad = fix16_mul(z, p);
+    return fix16_mul(rad, F16(57.2957795));
+}
+
+
 /* arctangent of y/x, returns degrees in -180..+180 */
 fix16_t fix16_atan2(fix16_t y, fix16_t x) {
-    fix16_t abs_y = (y < 0) ? fix16_sub(0, y) : y;
-    fix16_t angle;
-
-    /* both zero: no direction, return 0 rather than garbage */
     if (x == 0 && y == 0) return 0;
 
-    if (x >= 0) {
-        /* ratio stays within -1..+1 */
-        fix16_t denom = fix16_add(abs_y, x);
-        if (denom == 0) return 0;
-        fix16_t r = fix16_div(fix16_sub(x, abs_y), denom);
-        angle = fix16_sub(F16(45.0), fix16_mul(F16(45.0), r));
-    } else {
-        fix16_t denom = fix16_add(abs_y, fix16_sub(0, x));
-        if (denom == 0) return 0;
-        fix16_t r = fix16_div(fix16_add(x, abs_y), denom);
-        angle = fix16_sub(F16(135.0), fix16_mul(F16(45.0), r));
-    }
+    fix16_t ax = (x < 0) ? fix16_sub(0, x) : x;
+    fix16_t ay = (y < 0) ? fix16_sub(0, y) : y;    fix16_t angle;
 
-    /* mirror into the lower half-plane if y was negative */
-    return (y < 0) ? fix16_sub(0, angle) : angle;
+    /* keep the ratio between 0 and 1 */
+    if (ay <= ax) angle = atan_unit_deg(fix16_div(ay, ax));
+    else          angle = fix16_sub(F16(90.0), atan_unit_deg(fix16_div(ax, ay)));
+
+    if (x < 0) angle = fix16_sub(F16(180.0), angle);   /* left half */
+    if (y < 0) angle = fix16_sub(0, angle);            /* lower half */
+    return angle;
 }
+
 /* square root in Q16.16.
  * sqrt(X/65536) * 65536 = sqrt(X << 16), so shift up and take an integer root.
  * negative input returns 0 rather than failing. */
