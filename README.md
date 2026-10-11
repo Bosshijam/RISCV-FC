@@ -16,7 +16,7 @@ So the firmware is written from scratch — but not from nothing. Proven algorit
 Current state
 Component	Status
 Fixed-point math library (Q16.16)	Complete — 27 unit tests, 400,000 random trials
-Trigonometry (sin / cos / atan2)	Complete — lookup table, ±0.5°
+Trigonometry (sin / cos / atan2)	Complete — sin/cos lookup table, atan2 polynomial within 0.002°
 One-axis plant simulator	Complete
 PID controller (P, I, D + anti-windup)	Complete — 14.5% overshoot, zero steady-state error
 Plotting and analysis tools	Complete

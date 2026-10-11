@@ -5,7 +5,7 @@ Owner: control loops, state estimation Period: 14 Aug – 25 Sep 2026 Status: PI
 1. Summary
 Item	State	Evidence
 Fixed-point math library	Done	27 unit tests + 400,000 random trials, all passing
-Trig (sin / cos / atan2)	Done	Lookup table + interpolation, accurate to ±0.5°
+Trig (sin / cos / atan2)	Done	sin/cos lookup table, atan2 polynomial within 0.002°
 One-axis plant simulator	Done	Verified against hand-calculated physics
 PID controller (P, I, D)	Done	14.5% overshoot, zero steady-state error
 Anti-windup clamp	Done	Integral bounded, tested
