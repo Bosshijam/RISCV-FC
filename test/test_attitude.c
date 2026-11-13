@@ -29,7 +29,7 @@ int main(void) {
     const int    N    = 60000;        /* 120 s */
 
     attitude_t att;
-    attitude_init(&att, F16(0.998));  /* time constant about 1 s */
+    attitude_init(&att, F16(0.998),F16(5.0),F16(0.002));  /* time constant about 1 s */
 
     double gyro_only = 0.0;
     double max_g = 0, max_a = 0, max_f = 0, sum_g = 0, sum_a = 0, sum_f = 0;

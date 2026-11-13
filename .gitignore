@@ -7,3 +7,6 @@ tools/gen_*
 run_*
 build/
 *.csv
+*.swp
+*.save
+*.png
